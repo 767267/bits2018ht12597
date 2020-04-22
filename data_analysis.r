@@ -1,8 +1,8 @@
 
-setwd("D:/BITS/project")
-path = getwd()
-#print(path)
-dat = read.csv("./diabetes.csv", header = TRUE)
+source("read_diab_file.r")
+source("get_filtered_data.r")
+
+dat = get_filtered_data()
 
 
 
@@ -21,6 +21,9 @@ dat = read.csv("./diabetes.csv", header = TRUE)
 cluster_colors <- c("red", "orange" , "green")
 
 #print(dat[1])
+
+range(dat$Glucose)
+range(dat$Insulin)
 
 max_preg = max(dat$Pregnancies)
 max_gluc = max(dat$Glucose)

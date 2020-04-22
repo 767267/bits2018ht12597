@@ -13,10 +13,9 @@
 
 library(caret)  # data manipulation
 
-setwd("D:/BITS/project")
-path = getwd()
-#print(path)
-dataset = read.csv("./diabetes.csv", header = TRUE)
+source("read_diab_file.r")
+
+dataset = read_diab_file()
 
 # create a list of 80% of the rows in the original dataset we can use for training
 validation_index <- createDataPartition(dataset$Outcome, p=0.80, list=FALSE)
@@ -38,18 +37,30 @@ metric <- "Accuracy"
 
 # a) linear algorithms
 set.seed(7)
-fit.lda <- train(Outcome~., data=dataset, method="lda", metric=metric, trControl=control)
-# b) nonlinear algorithms
-# CART
-set.seed(7)
-fit.cart <- train(Outcome~., data=dataset, method="rpart", metric=metric, trControl=control)
-# kNN
-set.seed(7)
-fit.knn <- train(Outcome~., data=dataset, method="knn", metric=metric, trControl=control)
-# c) advanced algorithms
-# SVM
-set.seed(7)
-fit.svm <- train(Outcome~., data=dataset, method="svmRadial", metric=metric, trControl=control)
-# Random Forest
-set.seed(7)
-fit.rf <- train(Outcome~., data=dataset, method="rf", metric=metric, trControl=control)
+# fit.lda <- train(Outcome~., data=dataset, method="lda", metric=metric, trControl=control)
+# # b) nonlinear algorithms
+# # CART
+# set.seed(7)
+# fit.cart <- train(Outcome~., data=dataset, method="rpart", metric=metric, trControl=control)
+# # kNN
+# set.seed(7)
+# fit.knn <- train(Outcome~., data=dataset, method="knn", metric=metric, trControl=control)
+# # c) advanced algorithms
+# # SVM
+# set.seed(7)
+# fit.svm <- train(Outcome~., data=dataset, method="svmRadial", metric=metric, trControl=control)
+# # Random Forest
+# set.seed(7)
+# fit.rf <- train(Outcome~., data=dataset, method="rf", metric=metric, trControl=control)
+
+ctrl    <- trainControl(method = "repeatedcv", 
+                        number = 4, 
+                        savePredictions = TRUE,
+                        verboseIter = T,
+                        returnResamp = "all")
+
+mod_fit <- train(Outcome~., 
+                 data=dataset, 
+                 method = "glm", 
+                 family="polynomial", 
+                 trControl = ctrl)

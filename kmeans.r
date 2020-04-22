@@ -15,19 +15,49 @@ library(tidyverse)  # data manipulation
 library(cluster)    # clustering algorithms
 library(factoextra) # clustering algorithms & visualization
 source("read_diab_file.r")
+source("get_filtered_data.r")
 
+raw = 0
 no_of_clusters = 3
 
-dat = read_diab_file()
+if(raw == 1)
+{
+  dat = read_diab_file()
+}
 
-dat =  filter(dat, Outcome == 1) 
+if(raw == 0)
+{
+ dat = get_filtered_data()
+}
 
-filtered_data = dat[,c(2,4)]
+summary(dat)
+
+dim(dat)
+#write.csv(dat, "./filtered_data.csv")
+
+filter1 <- c(5,8,6)   # Insulin, Age, BMI > had good correlation with Glucose     - 0.71
+filter2 <- c(5,8,6,3) # Insulin, Age, BMI, BP > had good correlation with Glucose - 0.66
+filter3 <- c(5,8,6,4) # Insulin, Age, BMI, Skin Thickness > had good correlation with Glucose - 0.68
+filter4 <- c(5,8,6,2) # Insulin, Age, BMI, Glucose
+
+filter5 <- c(5,8,6,7)   # Insulin, Age, BMI, DPF
+
+filter6 <- c(3,5,6)   # BP, Insulin, BMI
+
+filter7 <- c(3,8,4,5)   # BP, Insulin, BMI
+
+filter8 <- c(2,8,5)   # BP, Insulin, BMI
+
+filter9 <- c(2,6,8)    # Glucose, BMI, Age
+
+filter10 <- c(2,6,8 ,7)    # Glucose, BMI, Age, DPF
+
+filtered_data = dat[,filter10]
 
 
 
 
-cluster_colors <- c("red", "orange" , "green")
+#cluster_colors <- c("red", "orange" , "green")
 
 #print(dat[1])   dat %>% select(2:7) #
 
@@ -41,14 +71,8 @@ cluster_colors <- c("red", "orange" , "green")
 
 run_kmeans <- function(xtimes)
 {
-  min = 0
-  #for (x in 1:xtimes) 
-    #{
-    #kmeans_results <- kmeans(filtered_data, no_of_clusters) 
-    #print(x)
-  #}   
   kmeans <- lapply(seq_len(xtimes), function(i){
-    results <- kmeans(filtered_data, 3)
+    results <- kmeans(filtered_data,  no_of_clusters)
   })
   return(kmeans)
 }
@@ -74,8 +98,30 @@ c_len = length(kmeans_results$cluster)
 
 print(c_len)
 
+df1<-data.frame(dat,cluster=kmeans_results$cluster)
+
+
+
+for(xx in 1:no_of_clusters)
+{
+  dfc <- filter(df1, cluster == xx)
+ 
+  cat("c",xx,":- Glucose range[", range(dfc$Glucose), "] BP range[",range(dfc$BloodPressure) ,"] Insulin range[",range(dfc$Insulin) ,"] BMI range[",range(dfc$BMI),"] Age range[",range(dfc$Age),"] ST range [",range(dfc$SkinThickness),"]  DPF range [",range(dfc$DiabetesPedigreeFunction),"]\r\n")
+}
 sil <- silhouette(kmeans_results$cluster, dist(filtered_data))
 fviz_silhouette(sil)
+
+# hists <- lapply(seq_len(3), function(i){
+#   dff <- filter(df1, cluster == i)
+#   hists <- hist(dff$Age)
+# })
+
+#dfc1 <- filter(df1, cluster == 1)
+#dfc2 <- filter(df1, cluster == 2)
+#dfc3 <- filter(df1, cluster == 3)
+# hist(dfc1$Glucose)
+# hist(dfc2$Glucose)
+# hist(dfc3$Glucose)
 
 # c31 = 0
 # c30 = 0
@@ -108,7 +154,7 @@ fviz_silhouette(sil)
 #       c20 = c20 + 1
 #     }
 #   }
-#   else 
+#   else
 #   {
 #     if(dat[i,c("Outcome")] == 1)
 #     {
@@ -119,7 +165,7 @@ fviz_silhouette(sil)
 #       c10 = c10 + 1
 #     }
 #   }
-#  
+# 
 # }
 # 
 # print(c31)
@@ -144,16 +190,6 @@ fviz_silhouette(sil)
 
 # https://stackoverflow.com/questions/15376075/cluster-analysis-in-r-determine-the-optimal-number-of-clusters
 
-mydata <- filtered_data
 
-max_tries = 15
 
-wss <- (nrow(mydata)-1)*sum(apply(mydata,2,var))
-for (i in 2:max_tries)
-  {
-  wss[i] <- sum(kmeans(mydata, centers=i)$withinss)
-}
-plot(1:15, wss, type="b", xlab="Number of Clusters",
-     ylab="Within groups sum of squares")
 
-print(min(wss))

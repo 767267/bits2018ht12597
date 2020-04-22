@@ -19,13 +19,30 @@
 
 library(corrplot)
 library(tidyverse)
-source("read_diab_file.r")
-
 library(BBmisc)
 
-dat = read_diab_file()
+source("read_diab_file.r")
+source("get_filtered_data.r")
 
-display(dat.info(),dat.head())
+
+raw = 0
+
+if(raw == 1)
+{
+  dat = read_diab_file()
+}
+if(raw == 0)
+{
+  dat = get_filtered_data()
+  
+}
+# 
+# dim(dat)
+# 
+# hist(dat[,"Insulin"])
+
+
+#display(dat.info(),dat.head())
 
 correlations = cor(dat[,2:8])
 write.csv(correlations, "./correlations.csv")
