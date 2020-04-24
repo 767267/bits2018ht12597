@@ -1,4 +1,4 @@
-# kemans - https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/kmeans
+# kmeans - https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/kmeans
 
 # columns 
 #    1 Pregnancies, 
