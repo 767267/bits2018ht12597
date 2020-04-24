@@ -25,7 +25,8 @@ high_risk_model <- lm(y ~ x)
 
 n <- 3
 mat <- matrix(ncol=2, nrow=n)
-
+colnames(mat) <- c("Intercept", "Slope")
+rownames(mat) <- c("high risk", "moderate risk" , "low risk")
 mat[1,]  <- coef(high_risk_model)
 
 abline(high_risk_model, col=colors[1], lty = 2)
