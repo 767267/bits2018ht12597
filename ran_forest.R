@@ -52,9 +52,9 @@ plot(rand)
 
 varImpPlot(rand)
     
-# repeating with efficient no of trees observed from previous stage
+# repeating with efficient no of trees observed from previous stage (i.e. trees = 250 to 280)
 
-rand <- randomForest(Outcome~., data=train_data, ntree=100) 
+rand <- randomForest(Outcome~., data=train_data, ntree=250) 
 
 pred1 <- predict(rand, test_data[-9],type="class" )
 
