@@ -1,5 +1,6 @@
+# Trend understanding using lm regression
+# lm is choosen as the data changes over one year times are not significant 
 
-library(fpp2)
 read_file <- function() {
   dat = read.csv("./qoc_data.csv", sep = ",", header = FALSE)
   return(dat)
@@ -31,6 +32,7 @@ mat[1,]  <- coef(high_risk_model)
 
 abline(high_risk_model, col=colors[1], lty = 2)
 #summary(high_risk_model)
+
 
 for(i in 2:3)
 {
