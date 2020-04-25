@@ -14,7 +14,7 @@ source("get_filtered_data.r")
 #    9 Outcome
 
 
-raw = 1
+raw = 0
 no_of_clusters = 3
 
 if(raw == 1)
@@ -32,7 +32,7 @@ dat <- dat[,1:8]
 fviz_nbclust(dat, kmeans, method = "gap_stat")
 
 # result we see optimal number is 1, in our case that will not make any siginificant results
-no_of_clusters = 3
+
 km.res <- kmeans(dat, no_of_clusters, nstart = 25)
 fviz_cluster(km.res, dat,  geom = "point", 
              ellipse= FALSE, show.clust.cent = FALSE,
@@ -49,13 +49,22 @@ for(xx in 1:no_of_clusters)
 # Now DBSCAN 
 
 set.seed(123)
-dbscan::kNNdistplot(dat, k =  3)
-abline(h = 0.15, lty = 2)
+res <- dbscan::kNNdistplot(dat, k =  3)
+abline(h = 60, lty = 2)
 
-db <- fpc::dbscan(dat, eps = 0.0000001, MinPts = 3)
+db <- fpc::dbscan(dat, eps = 60, MinPts = 3)
 print(db)
 fviz_cluster(db, data = dat, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 
+summary(db$cluster)
+
+km.df2<-data.frame(dat,cluster=db$cluster)
+for(xx in 1:2)
+{
+  dfc <- filter(km.df2, cluster == xx)
+  
+  cat("c",xx,":- Glucose range[", range(dfc$Glucose), "] BP range[",range(dfc$BloodPressure) ,"] Insulin range[",range(dfc$Insulin) ,"] BMI range[",range(dfc$BMI),"] Age range[",range(dfc$Age),"] ST range [",range(dfc$SkinThickness),"]  DPF range [",range(dfc$DiabetesPedigreeFunction),"]\r\n")
+}
 # results we observe only 1 cluster
