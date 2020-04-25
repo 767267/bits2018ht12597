@@ -52,7 +52,7 @@ set.seed(123)
 res <- dbscan::kNNdistplot(dat, k =  3)
 abline(h = 60, lty = 2)
 
-db <- fpc::dbscan(dat, eps = 60, MinPts = 3)
+db <- fpc::dbscan(dat, eps = 60, MinPts = 6)
 print(db)
 fviz_cluster(db, data = dat, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
@@ -67,4 +67,4 @@ for(xx in 1:2)
   
   cat("c",xx,":- Glucose range[", range(dfc$Glucose), "] BP range[",range(dfc$BloodPressure) ,"] Insulin range[",range(dfc$Insulin) ,"] BMI range[",range(dfc$BMI),"] Age range[",range(dfc$Age),"] ST range [",range(dfc$SkinThickness),"]  DPF range [",range(dfc$DiabetesPedigreeFunction),"]\r\n")
 }
-# results we observe only 1 cluster
+# results are not interesting in terms of risk based range formation
