@@ -1,10 +1,5 @@
 #find best corelations 
 
-#devtools::install_github("neuropsychology/psycho.R")  # Install the newest version
-
-#library(psycho)  
-#library("PerformanceAnalytics")
-
 # columns 
 #    1 Pregnancies, 
 #    2 Glucose, 

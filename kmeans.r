@@ -52,7 +52,7 @@ filter9 <- c(2,6,8)    # Glucose, BMI, Age
 
 filter10 <- c(2,6,8 ,7)    # Glucose, BMI, Age, DPF
 
-filtered_data = dat[,filter10]
+filtered_data = dat[,filter9]
 
 
 

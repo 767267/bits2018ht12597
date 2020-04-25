@@ -1,5 +1,5 @@
 library("factoextra")
-
+library("dplyr") #filter
 source("read_diab_file.r")
 source("get_filtered_data.r")
 # columns 
@@ -38,7 +38,7 @@ fviz_cluster(km.res, dat,  geom = "point",
              ellipse= FALSE, show.clust.cent = FALSE,
              palette = "jco", ggtheme = theme_classic())
 
-km.df1<-data.frame(dat,cluster=km.res$cluster)
+km.df1 <- data.frame(dat,cluster=km.res$cluster)
 
 for(xx in 1:no_of_clusters)
 {
@@ -50,9 +50,9 @@ for(xx in 1:no_of_clusters)
 
 set.seed(123)
 res <- dbscan::kNNdistplot(dat, k =  3)
-abline(h = 60, lty = 2)
+abline(h = 70, lty = 2)
 
-db <- fpc::dbscan(dat, eps = 60, MinPts = 6)
+db <- fpc::dbscan(dat, eps = 70, MinPts = 6)
 print(db)
 fviz_cluster(db, data = dat, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
